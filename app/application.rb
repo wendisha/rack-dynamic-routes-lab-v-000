@@ -6,8 +6,14 @@ class Application
     req = Rack::Request.new(env)
     
   if req.path.match(/items/)
-    #if 
-      resp.write "You requested the songs"
+    item_name = req.path.split("/items/").last
+      item = @@items.find{|i| i.name == item_name}
+       if item != nil
+        resp.write item.price
+      else
+        resp.status = 400
+        resp.write "Item not found"
+      end
   else
       resp.write "Route not found"
       resp.status = 404
